@@ -1,103 +1,137 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { useState } from 'react';
+
+export default function Page() {
+  const [mode, setMode] = useState<'training' | 'services'>('training');
+
+  const trainingHotspots = [
+    {
+      top: '17.6%',
+      left: '44.3%',
+      image: '/Frame1.png',
+      label: 'AC Course: In this course you will learn how to fix AC',
+      labelStyle: 'left-[210px] top-0 -translate-y-1/2', 
+      link: '/courses#ac-course'
+    },
+    {
+      top: '32.2%',
+      left: '10.5%',
+      image: '/Frame2.png',
+      label: 'Fridge Course: In this course you will learn how to fix Fridge',
+      labelStyle: 'right-[190px] top-7 -translate-y-1/2', 
+      link: '/courses#fridge-course',
+    },
+    {
+      top: '43%',
+      left: '8.6%',
+      image: '/Frame3.png',
+      label: 'Washing Machine Course: In this course you will learn how to fix Washing Machine',
+      labelStyle: 'right-[200px] -translate-y-1/2', 
+      link: '/courses#washing-machine-course'
+    },
+  ];
+
+  const servicesHotspots = [
+    {
+      top: '17.6%',
+      left: '44.3%',
+      image: '/Frame1.png',
+      label: 'AC Repair: Book a professional to repair your AC',
+      labelStyle: 'left-[210px] top-0 -translate-y-1/2',
+      link: '/services',
+    },
+    {
+      top: '32.2%',
+      left: '10.5%',
+      image: '/Frame2.png',
+      label: 'Fridge Repair: Book a professional to repair your Fridge',
+      labelStyle: 'right-[190px] top-7 -translate-y-1/2',
+      link: '/services',
+    },
+    {
+      top: '43%',
+      left: '8.6%',
+      image: '/Frame3.png',
+      label: 'Washing Machine Repair: Book a professional to repair your Washing Machine',
+      labelStyle: 'right-[200px] -translate-y-1/2',
+      link: '/services',
+    },
+  ];
+
+  const currentHotspots = mode === 'training' ? trainingHotspots : servicesHotspots;
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="flex flex-col items-center bg-gray-100 min-h-screen p-4">
+      <Image
+        src="/EasyStan_Logo.png"
+        alt="Logo"
+        height={100}
+        width={100}
+        className="absolute left-5 top-5"
+      />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      <div className="relative">
+        <video
+          src="/ai_head.mov"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-auto h-[100vh] object-contain mix-blend-darken"
+        />
+        {currentHotspots.map((spot, index) => (
+          <div
+            key={index}
+            className="absolute"
+            style={{ top: spot.top, left: spot.left }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+            <div className="relative group">
+              <Link href={spot.link} scroll={false}>
+              <Image
+                src={spot.image}
+                alt={spot.label}
+                width={200}
+                height={200}
+                className="cursor-pointer hover:scale-105 transition-transform opacity-50 duration-200"
+              />
+              </Link>
+              <Link href={spot.link} scroll={false}>
+              <div
+                className={`absolute ${spot.labelStyle} bg-black text-white text-xs px-3 py-1 rounded opacity-50 group-hover:opacity-100 transition duration-300 z-10 pointer-events-auto whitespace-normal w-48`}
+              >
+                <div className='flex flex-col'>
+                  <span className='font-semibold text-center mb-2'>{spot.label.split(':')[0]}</span>
+                  <span className='text-center'>{spot.label.split(':')[1]}</span>
+                </div>   
+              </div>
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Mode Toggle Buttons */}
+      <div className="flex gap-4 mt-6 absolute right-10 bottom-5">
+        <button
+          className={`px-6 py-2 rounded ${
+            mode === 'training' ? 'bg-black text-white' : 'bg-gray-200 text-black'
+          }`}
+          onClick={() => setMode('training')}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          Training
+        </button>
+        <button
+          className={`px-6 py-2 rounded ${
+            mode === 'services' ? 'bg-black text-white' : 'bg-gray-200 text-black'
+          }`}
+          onClick={() => setMode('services')}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          Services
+        </button>
+      </div>
     </div>
   );
 }

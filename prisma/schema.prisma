@@ -34,5 +34,5 @@ model ContactRequest {
   date    DateTime
   time    DateTime
   message String
-  phone String
+  phone   String
 }

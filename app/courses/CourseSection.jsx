@@ -18,7 +18,7 @@ export default function CourseSection({ id, title, courses, category, bgWhite })
             >
               <div className="w-full h-[250px] relative overflow-hidden rounded-md ">
                 <Image
-                  src={`/${course.thumbnail}` || '/placeholder.png'}
+                  src={course.thumbnail ? `/${course.thumbnail}` : '/placeholder.png'}
                   alt={course.title}
                   fill
                   className="object-cover"

@@ -7,10 +7,15 @@ import CourseSection from './CourseSection';
 
 // ✅ Helper to filter courses dynamically
 async function getCourses(category) {
+  try {
   return await prisma.course.findMany({
     where: category ? { category } : {},
     take: 3, // show only 3 in preview sections
   });
+} catch (error) {
+  console.error('Failed to fetch ${category} courses:', error);
+  return [];
+}
 }
 
 export default async function Page({ searchParams }) {

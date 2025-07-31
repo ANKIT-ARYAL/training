@@ -10,7 +10,7 @@ export async function GET() {
         });
         return NextResponse.json(courses);
     } catch (error) {
-        return NextResponse.json({error: 'Something went wrong'}, {status: 500});
+        console.error('Something went wrong:', error);
     }
 }
 
@@ -30,6 +30,6 @@ export async function POST(request: Request){
 
         return NextResponse.json(course, {status: 201});
     }catch (error) {
-        return NextResponse.json({error: 'Failed to create course'}, {status: 500});
+        console.error('Failed to create course:', error);
     }
 }

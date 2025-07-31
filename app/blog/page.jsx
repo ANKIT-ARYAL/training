@@ -1,44 +1,23 @@
-'use client';
-
+// app/blogs/page.tsx
+import { prisma } from '@/prismaClient';
+import Image from 'next/image';
 import React from 'react';
 
-// Sample blog data — replace with your dynamic data source later
-const blogPosts = [
-  {
-    id: 1,
-    title: 'How to Maintain Your Air Conditioner for Peak Performance',
-    summary:
-      'Learn essential tips and tricks to keep your AC running efficiently all summer long.',
-    date: 'July 25, 2025',
-    category: 'AC Repair',
-  },
-  {
-    id: 2,
-    title: 'Troubleshooting Common Washing Machine Issues',
-    summary:
-      'A step-by-step guide to diagnosing and fixing frequent washing machine problems yourself.',
-    date: 'July 20, 2025',
-    category: 'Washing Machine',
-  },
-  {
-    id: 3,
-    title: 'Choosing the Right Refrigerator for Your Home',
-    summary:
-      'Key factors to consider when buying a refrigerator to suit your needs and budget.',
-    date: 'July 15, 2025',
-    category: 'Refrigerators',
-  },
-  {
-    id: 4,
-    title: 'Why Regular Appliance Maintenance Saves You Money',
-    summary:
-      'Discover how timely servicing can extend the lifespan of your home appliances.',
-    date: 'July 10, 2025',
-    category: 'General Tips',
-  },
-];
+export const dynamic = 'force-dynamic';
 
-export default function BlogsPage() {
+export default async function BlogPage() {
+  const blogPosts = await prisma.blog.findMany({
+    orderBy: { date: 'desc' },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      coverImage: true,
+      date: true,
+      category: true,
+    },
+  });
+
   return (
     <div className="container mx-auto px-6 py-16 min-h-screen font-light text-gray-900">
       <header className="text-center max-w-3xl mx-auto mb-12">
@@ -49,17 +28,30 @@ export default function BlogsPage() {
       </header>
 
       <section className="max-w-5xl mx-auto grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
-        {blogPosts.map(({ id, title, summary, date, category }) => (
+        {blogPosts.map((post) => (
           <article
-            key={id}
+            key={post.id}
             className="bg-white shadow-lg rounded-lg p-6 hover:shadow-2xl transition-shadow duration-300"
           >
-            <div className="mb-2 text-sm text-indigo-600 font-semibold uppercase">{category}</div>
+            <div className='mb-2'>
+              <Image
+              src={`/${post.coverImage}`} 
+              width={300}
+              height={300}
+              alt='blog-image'/>
+            </div>
+            <div className="mb-2 text-sm text-indigo-600 font-semibold uppercase">
+              {post.category}
+            </div>
             <h2 className="text-2xl font-semibold mb-3 hover:text-indigo-700 cursor-pointer">
-              {title}
+              {post.title}
             </h2>
-            <p className="text-gray-700 mb-6">{summary}</p>
-            <div className="text-sm text-gray-500">{date}</div>
+            <p className="text-gray-700 mb-6">
+              {post.content.slice(0, 100)}...
+            </p>
+            <div className="text-sm text-gray-500">
+              {new Date(post.date).toLocaleDateString()}
+            </div>
           </article>
         ))}
       </section>

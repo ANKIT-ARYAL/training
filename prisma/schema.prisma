@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  thumbnail   String
+  duration    String
+  category    String? // e.g., 'ac', 'fridge', 'washing machine'
+  createdAt   DateTime @default(now())
+}
+
+model Blog {
+  id String @id @default(uuid())
+  title String
+  content String // Full HTML/Markdown
+  coverImage String
+  date DateTime @default(now())
+  category String?
+}
+
+model ContactRequest {
+  id String @id @default(uuid())
+  name String
+  email String
+  date DateTime
+  time DateTime
+  message String
+}

@@ -5,20 +5,47 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 export default function ContactSection() {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState('');
 
-  const timeSlots = [
-    '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM'
-  ];
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const formattedDate = selectedDate.toLocaleDateString();
-    console.log({ email, message, selectedDate: formattedDate, selectedTime });
-    alert('Appointment request submitted!');
+    console.log('handleSubmit triggered');
+    const payload = {
+      name,
+      email,
+      message,
+      date: selectedDate.toISOString(),
+      time: new Date(`${selectedDate.toDateString()} ${selectedTime}`).toISOString()
+    };
+console.log('Payload:', payload);
+    try {
+      const res = await fetch('/api/services', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert('Appointment request submitted!');
+      } else {
+        alert('Something went wrong. Please try again.');
+        console.error(data.error);
+      }
+    } catch (err) {
+      alert('Failed to send. Check your connection.');
+      console.error('Submit failed', err);
+    }
+
+    // Reset form
+    setName('');
     setEmail('');
     setMessage('');
     setSelectedTime('');
@@ -26,73 +53,68 @@ export default function ContactSection() {
   };
 
   return (
-    <div className="bg-gray-100 py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl mx-auto bg-white shadow-xl rounded-lg p-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Book a Free Consultation</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Your Email</label>
-            <input
-              type="email"
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+    <section className="p-4 max-w-xl mx-auto">
+      <h2 className="text-2xl font-semibold mb-4">Book an Appointment</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          type="text"
+          placeholder="Name"
+          className="w-full border p-2 rounded"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
 
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full border p-2 rounded"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+
+        <textarea
+          placeholder="Message"
+          className="w-full border p-2 rounded"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          rows={4}
+          required
+        />
+
+        <div className="flex gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">Select a Date</label>
+            <label className="block mb-1 text-sm">Select Date</label>
             <DatePicker
               selected={selectedDate}
               onChange={(date) => setSelectedDate(date)}
               minDate={new Date()}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
               dateFormat="MMMM d, yyyy"
+              className="border p-2 rounded w-full"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Select a Time Slot</label>
-            <select
+            <label className="block mb-1 text-sm">Select Time</label>
+            <input
+              type="time"
+              className="border p-2 rounded w-full"
               value={selectedTime}
               onChange={(e) => setSelectedTime(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
-              required
-            >
-              <option value="">-- Choose a time --</option>
-              {timeSlots.map((time) => (
-                <option key={time} value={time}>
-                  {time}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Your Message</label>
-            <textarea
-              rows="4"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
-              placeholder="Tell us about your problem or idea..."
               required
             />
           </div>
+        </div>
 
-          <div className="text-center">
-            <button
-              type="submit"
-              className="bg-purple-700 text-white px-6 py-2 rounded-md hover:bg-purple-800 transition"
-            >
-              Submit Request
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+        >
+          Submit
+        </button>
+      </form>
+    </section>
   );
 }

@@ -36,7 +36,7 @@ export default function CourseSection({ id, title, courses, category, bgWhite })
         {/* View All Button */}
         <div className="flex justify-center mt-5">
           <Link href={`/courses?category=${category}`}>
-            <button className="bg-white text-black px-4 py-2 rounded-md">
+            <button className="bg-white text-black px-4 py-2 rounded-md border-[0.5]">
               View All {title}
             </button>
           </Link>

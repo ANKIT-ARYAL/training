@@ -11,6 +11,9 @@ export async function GET() {
         return NextResponse.json(courses);
     } catch (error) {
         console.error('Something went wrong:', error);
+        return NextResponse.json({ error: 'Failed to fetch courses'}, { status: 500})
+    } finally {
+        await prisma.$disconnect();
     }
 }
 
@@ -31,5 +34,8 @@ export async function POST(request: Request){
         return NextResponse.json(course, {status: 201});
     }catch (error) {
         console.error('Failed to create course:', error);
+        return NextResponse.json({ error: 'Failed to create course'}, { status : 500})
+    } finally {
+        await prisma.$disconnect();
     }
 }

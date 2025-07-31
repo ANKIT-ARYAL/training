@@ -7,13 +7,16 @@ export default function CourseSection({ id, title, courses, category, bgWhite })
       <div className={`mx-auto px-4 container ${bgWhite ? 'bg-white text-black pb-5' : ''}`}>
         <h2 className="text-2xl font-semibold text-center">{title}</h2>
 
-        <div className="flex justify-between">
+        <div className="flex flex-wrap justify-between">
           {courses.map((course) => (
             <div
               key={course.id}
-              className="border-[0.5] rounded-md shadow-md p-4 bg-white text-black mt-5 w-[30%]"
+              className="
+                border-[0.5] rounded-md shadow-md p-4 bg-white text-black mt-5
+                w-full sm:w-[48%] md:w-[30%]
+              "
             >
-              <div className="w-full h-[250px] relative overflow-hidden rounded-md">
+              <div className="w-full h-[250px] relative overflow-hidden rounded-md ">
                 <Image
                   src={`/${course.thumbnail}` || '/placeholder.png'}
                   alt={course.title}

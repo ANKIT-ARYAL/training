@@ -6,11 +6,11 @@ export async function POST(req: Request) {
     console.log('API /api/contact POST called');
 
     // Parse request body JSON
-    const { name, email, message, date, time } = await req.json();
-    console.log('Received data:', { name, email, message, date, time });
+    const { name, email, message, date, time, phone } = await req.json();
+    console.log('Received data:', { name, email, message, date, time, phone});
 
     // Validate inputs
-    if (!name || !email || !message || !date || !time) {
+    if (!name || !email || !message || !date || !time || !phone ) {
       console.warn('Missing required fields');
       return NextResponse.json({ success: false, error: 'Missing required fields' }, { status: 400 });
     }
@@ -43,6 +43,7 @@ export async function POST(req: Request) {
       subject: `New Contact Form Submission from ${name}`,
       html: `
         <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Message:</strong> ${message}</p>
         <p><strong>Date:</strong> ${date}</p>

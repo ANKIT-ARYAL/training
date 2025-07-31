@@ -118,13 +118,14 @@ export default async function Page({ searchParams }) {
         </div>
 
         {/* ---- COURSE SECTIONS ---- */}
-        <div className="bg-black text-white mt-5 pb-5 font-thin">
+        <div className="bg-black text-white mt-5 pb-5 font-thin ">
           {/* AC Courses */}
           <CourseSection
             id="ac-course"
             title="AC Training Course"
             courses={acCourses}
             category="ac"
+            
           />
           {/* Fridge Courses */}
           <CourseSection

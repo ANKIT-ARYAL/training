@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/prismaClient';
 import { NextResponse } from 'next/server';
-
-const prisma = new PrismaClient();
 
 export async function GET() {
   try {
@@ -12,9 +10,7 @@ export async function GET() {
   } catch (error) {
     console.error('Something went wrong:', error);
     return NextResponse.json({ error: 'Failed to fetch courses' }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
-  }
+  } 
 }
 
 export async function POST(request: Request) {
@@ -35,7 +31,5 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Failed to create course:', error);
     return NextResponse.json({ error: 'Failed to create course' }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
-  }
+  } 
 }
